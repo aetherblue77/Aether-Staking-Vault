@@ -1,0 +1,8 @@
+{
+  "sepolia": {
+    "StakingVault": {
+      "address": "0x496CA82e57E3356d46CBB0209Dc68d23CC26D7B0",
+      "startBlock": 10169845
+    }
+  }
+}
