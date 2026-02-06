@@ -1,0 +1,15 @@
+# 1. Entity to save global statistik (Dashboard Card)
+# This will populate the "TVL" and "Active Stakers" data in UI
+type StakingStat @entity (immutable: false) {
+  id: ID!
+  totalValueLocked: BigInt!
+  totalActiveStakers: Int!
+}
+
+# 2. Entity to save user data
+# Tracking user has fund or not
+type Staker @entity (immutable: false){
+  id: ID!
+  totalStaked: BigInt!
+  isActive: Boolean!
+}

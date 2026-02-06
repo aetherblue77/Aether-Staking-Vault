@@ -5,8 +5,11 @@ import { motion, AnimatePresence, Variants } from "framer-motion"
 import { useStaking } from "../hooks/useStaking"
 import { parseEther, formatEther } from "viem"
 import Image from "next/image"
+import { useAccount, useWriteContract } from "wagmi"
+import abis from "../constants/abis.json"
 
 export function StakingCard() {
+    const { address } = useAccount()
     const [activeTab, setActiveTab] = useState("stake") // "stake" | "withdraw" | "claim"
     const [amount, setAmount] = useState("")
 
@@ -25,6 +28,17 @@ export function StakingCard() {
         rawStaked,
         rawEarned,
     } = useStaking()
+
+    // Faucet Logic
+    const { writeContract, isPending: isMinting } = useWriteContract()
+    const handleFaucet = () => {
+        writeContract({
+            address: "0x735DD828cAfF16701dabd4d46E345012C89463c9",
+            abi: abis.AetherToken,
+            functionName: "mint",
+            args: [address, parseEther("100")],
+        })
+    }
 
     // Auto Reset When Transaction Success
     useEffect(() => {
@@ -90,7 +104,9 @@ export function StakingCard() {
             <div className="pointer-events-none absolute top-0 left-1/2 -z-10 h-2/3 w-3/4 -translate-x-1/2 rounded-full bg-blue-600/10 blur-[90px]" />
 
             {/* --- 1. SLIDING TABS NAVIGATION --- */}
-            <div className={`relative flex rounded-2xl border border-white/5 bg-black/40 p-1.5 mb-8`}>
+            <div
+                className={`relative mb-8 flex rounded-2xl border border-white/5 bg-black/40 p-1.5`}
+            >
                 {["stake", "withdraw", "claim"].map((tab) => (
                     <button
                         key={tab}
@@ -130,7 +146,7 @@ export function StakingCard() {
                     {/* MODE A: INPUT FORM (STAKE & WITHDRAW) */}
                     {activeTab !== "claim" ? (
                         <motion.div
-                            key="input-section"
+                            key={activeTab}
                             variants={contentVariants}
                             initial="hidden"
                             animate="visible"
@@ -138,44 +154,77 @@ export function StakingCard() {
                             className="space-y-4"
                         >
                             {/* HEADER INPUT: LEFT LABEL & RIGHT BALANCE */}
-                            <div className="flex items-center justify-between px-1">
+                            <div className="mb-2 flex items-end justify-between px-1">
                                 {/* LEFT LABEL */}
-                                <span className="text-xs font-bold tracking-widest text-gray-500 uppercase">
+                                <span className="mb-1.5 text-xs font-bold tracking-widest text-gray-500 uppercase">
                                     Amount to {activeTab}
                                 </span>
-                                {/* RIGHT BALANCE */}
-                                <div className="flex items-center gap-2 rounded-lg border border-blue-500/20 bg-blue-500/10 px-3 py-1.5 shadow-[0_0_10px_rgba(59,130,246,0.1)] transition-all hover:bg-blue-500/20">
-                                    {/* Wallet Icon */}
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        viewBox="0 0 24 24"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        strokeWidth="2"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        className="h-3.5 w-3.5 text-blue-400"
-                                    >
-                                        <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4" />
-                                        <path d="M3 5v14a2 2 0 0 0 2 2h16v-5" />
-                                        <path d="M18 12a2 2 0 0 0 0 4h4v-4Z" />
-                                    </svg>
+                                {/* RIGHT SIDE GROUP (Faucet + Balance) */}
+                                <div className="flex flex-col items-end gap-1">
+                                    {/* A. FAUCET BUTTON */}
+                                    {activeTab === "stake" && (
+                                        <button
+                                            onClick={handleFaucet}
+                                            disabled={isMinting}
+                                            className="group flex items-center gap-1 text-[10px] font-bold tracking-wider text-blue-400/60 uppercase transition-colors hover:text-blue-400 disabled:opacity-30"
+                                        >
+                                            {isMinting ? (
+                                                <span className="animate-pulse">
+                                                    Minting...
+                                                </span>
+                                            ) : (
+                                                <>
+                                                    <svg
+                                                        className="h-2.5 w-2.5"
+                                                        fill="none"
+                                                        viewBox="0 0 24 24"
+                                                        stroke="currentColor"
+                                                    >
+                                                        <path
+                                                            strokeLinecap="round"
+                                                            strokeLinejoin="round"
+                                                            strokeWidth="2"
+                                                            d="M13 10V3L4 14h7v7l9-11h-7z"
+                                                        />
+                                                    </svg>
+                                                    <span>Faucet</span>
+                                                </>
+                                            )}
+                                        </button>
+                                    )}
+                                    <div className="flex items-center gap-2 rounded-lg border border-blue-500/20 bg-blue-500/10 px-3 py-1.5 shadow-[0_0_10px_rgba(59,130,246,0.1)] transition-all hover:bg-blue-500/20">
+                                        {/* Wallet Icon */}
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            viewBox="0 0 24 24"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            strokeWidth="2"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            className="h-3.5 w-3.5 text-blue-400"
+                                        >
+                                            <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4" />
+                                            <path d="M3 5v14a2 2 0 0 0 2 2h16v-5" />
+                                            <path d="M18 12a2 2 0 0 0 0 4h4v-4Z" />
+                                        </svg>
 
-                                    {/* Balance Text */}
-                                    <div className="flex items-center gap-1.5 text-xs">
-                                        <span className="font-medium text-gray-400">
-                                            {activeTab === "stake"
-                                                ? "Balance:"
-                                                : "Staked:"}
-                                        </span>
-                                        <span className="font-bold text-white">
-                                            {activeTab === "stake"
-                                                ? realTimeBalance
-                                                : realTimeStaked}
-                                        </span>
-                                        <span className="font-bold text-blue-400">
-                                            AEB
-                                        </span>
+                                        {/* Balance Text */}
+                                        <div className="flex items-center gap-1.5 text-xs">
+                                            <span className="font-medium text-gray-400">
+                                                {activeTab === "stake"
+                                                    ? "Balance:"
+                                                    : "Staked:"}
+                                            </span>
+                                            <span className="font-bold text-white">
+                                                {activeTab === "stake"
+                                                    ? realTimeBalance
+                                                    : realTimeStaked}
+                                            </span>
+                                            <span className="font-bold text-blue-400">
+                                                AEB
+                                            </span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -248,8 +297,8 @@ export function StakingCard() {
                             <div className="text-center">
                                 <p className="text-[10px] text-gray-500">
                                     {activeTab === "stake"
-                                        ? "Staking locks your funds for 7 days"
-                                        : "Withdrawals are processed instanly."}
+                                        ? "Staking locks your funds to get rewards"
+                                        : "Withdrawals are processed instantly"}
                                 </p>
                             </div>
                         </motion.div>
@@ -261,35 +310,35 @@ export function StakingCard() {
                             initial="hidden"
                             animate="visible"
                             exit="exit"
-                            className={`flex flex-col items-center justify-center gap-3 text-center transition-opacity duration-300 ${isLoading ? "opacity-60 pointer-events-none" : ""}`}
+                            className={`flex flex-col items-center justify-center gap-3 text-center transition-opacity duration-300 ${isLoading ? "pointer-events-none opacity-60" : ""}`}
                         >
-                                <div className="relative h-36 w-36">
-                                    <Image
-                                        src="/aeb-logo.png"
-                                        alt="AEB Token Logo"
-                                        fill
-                                        className="object-contain drop-shadow-2xl relative h-36 w-36"
-                                    />
-                                </div>
+                            <div className="relative h-36 w-36">
+                                <Image
+                                    src="/aeb-logo.png"
+                                    alt="AEB Token Logo"
+                                    fill
+                                    className="relative h-36 w-36 object-contain drop-shadow-2xl"
+                                />
+                            </div>
 
-                                <p className="text-sm font-medium tracking-widest text-gray-400 uppercase -mt-4 mb-2">
-                                    Unclaimed Rewards
-                                </p>
+                            <p className="-mt-4 mb-2 text-sm font-medium tracking-widest text-gray-400 uppercase">
+                                Unclaimed Rewards
+                            </p>
 
-                                <motion.p
-                                    initial={{
-                                        scale: 0.5,
-                                        filter: "blur(10px)",
-                                    }}
-                                    animate={{ scale: 1, filter: "blur(0px)" }}
-                                    transition={{ delay: 0.2, type: "spring" }}
-                                    className="text-5xl font-bold text-white drop-shadow-[0_0_25px_rgba(59,130,246,0.4)]"
-                                >
-                                    {realTimeEarned}{" "}
-                                    <span className="text-2xl text-blue-400">
-                                        AEB
-                                    </span>
-                                </motion.p>
+                            <motion.p
+                                initial={{
+                                    scale: 0.5,
+                                    filter: "blur(10px)",
+                                }}
+                                animate={{ scale: 1, filter: "blur(0px)" }}
+                                transition={{ delay: 0.2, type: "spring" }}
+                                className="text-5xl font-bold text-white drop-shadow-[0_0_25px_rgba(59,130,246,0.4)]"
+                            >
+                                {realTimeEarned}{" "}
+                                <span className="text-2xl text-blue-400">
+                                    AEB
+                                </span>
+                            </motion.p>
                         </motion.div>
                     )}
                 </AnimatePresence>

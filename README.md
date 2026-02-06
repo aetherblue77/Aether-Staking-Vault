@@ -1,55 +1,71 @@
 # Aether Staking Vault 🛡️💰
 
-**A Decentralized Finance (DeFi) Staking Protocol built on Ethereum.**
+**A Full-Stack Decentralized Finance (DeFi) Staking Protocol.**
 
-Welcome to the **Aether Staking Vault** repository. This is a Fullstack Web3 portfolio project designed to demonstrate a complete, secure, and tested DeFi staking system. The protocol allows users to stake their **Aether Blue ($AEB)** tokens and earn rewards in real-time based on a dynamic emission rate.
+Welcome to the **Aether Staking Vault**. This is a complete Web3 portfolio project that demonstrates how a DeFi system works from start to finish. It connects a secure **Smart Contract** (Backend) with a modern **User Interface** (Frontend) and uses **The Graph** (Data Indexing) for high-performance data fetching.
 
-## 🎯 Project Goal
-
-The main objective of this project is not just to build a simple DApp, but to master the underlying "engine" of DeFi. I built this to demonstrate competency in:
-
-* **Complex Staking Logic:** Handling time-based mathematical calculations (`rewardPerToken`, `lastTimeRewardApplicable`) to ensure precise reward distribution.
-* **Security First:** Implementing the "Checks-Effects-Interactions" pattern to prevent re-entrancy attacks and ensure fund safety.
-* **Smart Deployment:** Automating tokenomics setup (minting & funding) using advanced Hardhat scripts.
-* **Testing:** Writing comprehensive unit tests to cover edge cases, ensuring the system is robust before deployment.
-
-## ⚙️ How It Works
-
-1.  **The Token ($AEB):** A standard ERC-20 token with a total supply of **1 Billion**.
-2.  **The Vault:** A smart contract that holds **30% of the Total Supply** (300 Million AEB) as a reward pool.
-3.  **Staking:** Users deposit $AEB into the Vault.
-4.  **Rewards:** The Vault distributes rewards at a fixed rate (e.g., 1 Token/second) proportionally to all stakers.
-
-## 🗺️ Project Roadmap & Status
-
-This project follows a strict development phase. Below is the current progress:
-
-| Phase | Description | Status |
-| :--- | :--- | :--- |
-| **Phase 1** | **Smart Contract Logic**<br>Writing solidity contracts for Token and Vault. | ✅ **Completed** |
-| **Phase 2** | **Backend Deployment & Testing**<br>16/16 Unit Tests passed. Deployed & Verified on **Sepolia Testnet**. | ✅ **Completed** |
-| **Phase 3** | **Frontend Integration**<br>Building the UI using Next.js, RainbowKit, and Wagmi. | ⏳ **In Progress** |
-| **Phase 4** | **Mainnet Launch**<br>Final audit and deployment to a main network. | 🔜 **Planned** |
-
-## 📂 Repository Structure
-
-This is a monorepo containing both the smart contract logic and the user interface. **Click the folders below to navigate:**
-
-* 📂 **[backend](./backend)**
-    * Contains the **Hardhat project** (Smart Contracts, Unit Tests, Deploy Scripts).
-    * See the `README.md` inside this folder for technical documentation.
-
-* 📂 **[frontend](./frontend)**
-    * Contains the **Next.js project** (User Interface).
-    * *(Coming Soon)*
-
-## 🔗 Live Deployments (Sepolia)
-
-The backend is currently live and verified on the Sepolia Testnet.
-
-* **Aether Blue Token ($AEB):** [Insert Etherscan Link Here](https://sepolia.etherscan.io/token/0x7E51694815a2256B20Ebf6671Fc775edA01b0c66)
-* **Staking Vault Contract:** [Insert Etherscan Link Here](https://sepolia.etherscan.io/address/0xefa42Ac3A6893d10daD0ebB7a3c7dfA9b59C4A01)
+Users can stake their **Aether Blue ($AEB)** tokens to earn rewards in real-time.
 
 ---
 
-*Project by **Aether Blue**. Open for feedback and contributions.*
+## 🎯 Why This Project?
+
+I built this project to master the "full circle" of Web3 development. It demonstrates competency in:
+
+* **Smart Contract Engineering:** Writing secure Solidity code with complex math for reward calculations.
+* **Full-Stack Integration:** Connecting a blockchain backend to a Next.js frontend using Wagmi and Viem.
+* **Data Indexing:** Using **The Graph** to read blockchain data instantly without slowing down the website.
+* **User Experience (UX):** Creating a smooth UI with real-time updates, loading states, and error handling.
+
+---
+
+## ⚙️ How It Works
+
+1.  **The Token:** We use **$AEB**, a standard ERC-20 token.
+2.  **The Vault:** Users deposit (stake) their $AEB into the Smart Contract.
+3.  **The Rewards:** The Vault calculates rewards every second. The more you stake and the longer you stay, the more you earn.
+4.  **The Faucet:** For testing purposes, the UI includes a "Faucet" button so anyone can get free $AEB tokens to try the system.
+
+---
+
+## 🗺️ Project Status
+
+All major phases of development are now **Completed**.
+
+| Phase | Component | Description | Status |
+| :--- | :--- | :--- | :--- |
+| **Phase 1** | **Backend** | Smart Contracts (Solidity), Unit Testing, and Hardhat Scripts. | ✅ **Completed** |
+| **Phase 2** | **Deployment** | Deployed and verified contracts on **Sepolia Testnet**. | ✅ **Completed** |
+| **Phase 3** | **Data Layer** | Built and deployed a **Subgraph** to index staking data efficiently. | ✅ **Completed** |
+| **Phase 4** | **Frontend** | Built the UI with Next.js, integrated Faucet, APY Math, and Animations. | ✅ **Completed** |
+
+---
+
+## 📂 Repository Structure
+
+This is a **monorepo** (one repository with multiple parts). Click the folders below to explore the code for each section:
+
+* 📂 **[backend](./backend)**
+    * Contains the **Hardhat** project.
+    * Here you will find the Solidity Smart Contracts, deploy scripts, and security tests.
+
+* 📂 **[subgraph](./subgraph)**
+    * Contains **The Graph** project.
+    * This defines how we listen to blockchain events (like `Staked` or `Withdrawn`) and organize the data for the website.
+
+* 📂 **[frontend](./frontend)**
+    * Contains the **Next.js** project.
+    * This is the website where users interact with the protocol. It handles wallet connection, formatting numbers (like `1.2M`), and animations.
+
+---
+
+## 🔗 Live Deployments (Sepolia Testnet)
+
+The system is live on the Sepolia test network. You can view the contracts on Etherscan:
+
+* **Aether Blue Token ($AEB):** [View on Etherscan](https://sepolia.etherscan.io/address/0x735DD828cAfF16701dabd4d46E345012C89463c9)
+* **Staking Vault Contract:** [View on Etherscan](https://sepolia.etherscan.io/address/0x496CA82e57E3356d46CBB0209Dc68d23CC26D7B0)
+
+---
+
+*Project by **Aether Blue**. Built to demonstrate Web3 mastery.*

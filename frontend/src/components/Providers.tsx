@@ -1,6 +1,8 @@
 "use client"
 
 import * as React from "react"
+import { ApolloProvider } from "@apollo/client/react"
+import client from "@/src/lib/apolloClient"
 import {
     RainbowKitProvider,
     darkTheme,
@@ -43,11 +45,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
     return (
         <WagmiProvider config={config}>
             <QueryClientProvider client={queryClient}>
-                <RainbowKitProvider
-                    theme={aetherTheme}
-                >
-                    {children}
-                </RainbowKitProvider>
+                <ApolloProvider client={client}>
+                    <RainbowKitProvider theme={aetherTheme}>
+                        {children}
+                    </RainbowKitProvider>
+                </ApolloProvider>
             </QueryClientProvider>
         </WagmiProvider>
     )
