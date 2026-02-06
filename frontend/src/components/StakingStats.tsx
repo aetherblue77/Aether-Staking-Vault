@@ -40,23 +40,42 @@ export function StakingStats() {
         },
     })
 
+    // Read Total Supply from Smart Contract (Real-time TVL)
+    const { data: totalSupply } = useReadContract({
+        address: stakingAddress,
+        abi: stakingAbi,
+        functionName: "totalSupply",
+        query: {
+            refetchInterval: 10000,
+        },
+    })
+
     // --- TAKE DATA FROM GRAPHQL (TVL & Active Stakers) ---
     const { loading, error, data } = useQuery<StakingStatsData>(
         GET_GLOBAL_STATS,
         {
-            pollInterval: 5000,
-            fetchPolicy: "cache-and-network", // Always check new data
+            pollInterval: 60000, // 60s is safe for free tier
+            fetchPolicy: "cache-and-network",
+            errorPolicy: "all",
         },
     )
-    const isLoadingInitial = loading && !data
+
+    const isLoadingInitial = loading && !data && !totalSupply
+
+    // DEBUGGING SUBGRAPH
+    if (error) console.error("Subgraph Error:", error)
+    if (data) console.log("Subgraph Data:", data)
+
     // DATA PROCESSING
     const stats = data?.stakingStats?.[0]
 
     // --- MATEMATIC LOGIC FOR APY ---
-    // 1. Take TVL (Wei/BigInt)
-    const tvlWei = stats?.totalValueLocked
-        ? BigInt(stats.totalValueLocked)
-        : BigInt(0)
+    // 1. Take TVL (Wei/BigInt): Verify Contract First (Realtime), then Subgraph
+    const tvlWei = totalSupply
+        ? BigInt(totalSupply as bigint)
+        : stats?.totalValueLocked
+          ? BigInt(stats.totalValueLocked)
+          : BigInt(0)
     // 2. Take Reward Rate (Wei/BigInt)
     const rateWei = rewardRate ? BigInt(rewardRate as bigint) : BigInt(0)
     // 3. Calculate Reward Per Year (Rate * Second at Year)
