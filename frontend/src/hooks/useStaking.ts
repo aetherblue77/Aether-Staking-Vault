@@ -274,22 +274,22 @@ export function useStaking() {
             if (txType === "approve") {
                 toast.success("Approval Successful! ✅", {
                     description: "You can now proceed to Stake.",
-                    duration: 5000
+                    duration: 5000,
                 })
             } else if (txType === "stake") {
                 toast.success("Staking Successful! 🚀", {
                     description: "Your funds are now earning rewards.",
-                    duration: 5000
+                    duration: 5000,
                 })
             } else if (txType === "withdraw") {
                 toast.success("Withdrawal Successful! 💸", {
                     description: "Funds & Rewards sent to your wallet.",
-                    duration: 5000
+                    duration: 5000,
                 })
             } else if (txType === "claim") {
                 toast.success("Rewards Claimed! 💎", {
                     description: "AEB Tokens sent to your wallet.",
-                    duration: 5000
+                    duration: 5000,
                 })
             }
 

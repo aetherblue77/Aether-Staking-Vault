@@ -10,6 +10,9 @@ const inter = Inter({ subsets: ["latin"] })
 export const metadata: Metadata = {
     title: "Aether Staking Vault",
     description: "DeFi Staking Protocol",
+    icons: {
+        icon: "/favicon.ico",
+    },
 }
 
 export default function RootLayout({
@@ -18,8 +21,14 @@ export default function RootLayout({
     return (
         <html lang="en">
             <body className={inter.className}>
-                <Providers>{children}
-                    <Toaster position="top-right" theme="dark" richColors closeButton />
+                <Providers>
+                    {children}
+                    <Toaster
+                        position="top-right"
+                        theme="dark"
+                        richColors
+                        closeButton
+                    />
                 </Providers>
             </body>
         </html>
