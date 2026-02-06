@@ -1,11 +1,11 @@
-import {ApolloClient, InMemoryCache, HttpLink} from "@apollo/client"
+import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client"
 
-const GRAPH_URL = "https://api.studio.thegraph.com/query/1740311/aether-staking-vault/version/latest"
+const SUBGRAPH_URL = process.env.NEXT_PUBLIC_SUBGRAPH_URL || ""
 
 const client = new ApolloClient({
     link: new HttpLink({
-        uri: GRAPH_URL,
-        fetch
+        uri: SUBGRAPH_URL,
+        fetch,
     }),
     cache: new InMemoryCache(),
 })
