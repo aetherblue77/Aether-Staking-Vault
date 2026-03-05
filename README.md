@@ -11,12 +11,6 @@ Users can stake their **Aether Blue ($AEB)** tokens to earn rewards in real-time
 
 ---
 
-## 📽️ Video Demo
-<video src="./assets/demo.mp4" controls="controls" style="max-width: 100%;">
-</video>
-
----
-
 ## 🎯 Why This Project?
 
 I built this project to master the "full circle" of Web3 development. It demonstrates competency in:
