@@ -6,15 +6,14 @@ Welcome to the **Aether Staking Vault**. This is a complete Web3 portfolio proje
 
 Users can stake their **Aether Blue ($AEB)** tokens to earn rewards in real-time.
 
----
-
 > 🚀 **[Try the Live Demo Here!](https://aether-staking-vault.vercel.app/)**
 > *(Connect to Sepolia Testnet to interact)*
 
 ---
 
 ## 📽️ Video Demo
-https://github.com/aetherblue77/aether-staking-vault/raw/main/assets/demo.mp4
+<video src="./assets/demo.mp4" controls="controls" style="max-width: 100%;">
+</video>
 
 ---
 
